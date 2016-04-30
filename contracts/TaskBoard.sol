@@ -1,107 +1,160 @@
-contract TaskBoard is owned, named("TaskBoard"), util, SetUtil {
+import "Treasury.sol";
 
+
+//adapted from JobMarket contract by ultra-koder: https://github.com/ultra-koder/JobMarket/blob/master/dapp/contracts/jobmarket.sol
+contract TaskBoard {
+    address public tokenAddress;
+    
     uint32 public totalTasks;
     mapping (uint => Task) tasks;
-    Set_ui32 taskList;
-
-    event NewTask(uint id, bytes32 name, bytes32 description);
-    event NewOwner(bytes32 name, address addr);
-    event NewSkill(bytes32 name);
-
+    uint32[] taskArray;
+    
+    event NewTask(uint id, string name, string description);
+    event NewOwner(string name, address addr);
+    //event NewSkill(bytes32 name);
+    
     enum TaskStatus {
         New,
         InProgress,
         Completed,
         Done
     }
-
-    Set_addr ownerList;
-    Set_addr volunteerList;
-    Set_addr skillList;
+    
+    address[] ownerArray;
+    address[] volunteerArray;
+    
     mapping (address => Owner) owners;
     mapping (address => Volunteer) volunteers;
-    mapping (uint => Skill) skills;
-
+    //mapping (uint => Skill) skills;
+    
     struct Owner {
-        bytes32 name;
+        string name;
         address account;
+        //uint tokenBalance;
         uint tasksCompleted;
-        Set_ui32 taskIds;
+        uint32[] taskIds_;
     }
-
+    
     struct Volunteer {
-        bytes32 name;
+        string name;
         address account;
+        //uint tokenBalance;
         uint tasksCompleted;
-        Set_ui32 taskIds;
-        Set_ui32 skillIds;
+        uint32[] taskIds_;
     }
-
+    
     struct Task {
-        bytes32 name;
-        bytes32 description;
+        string name;
+        string description;
         uint value;
+        uint rewardAmount;
+        string rewardName;
+        string rewardDescription;
         Owner owner;
         Volunteer volunteer;
         TaskStatus status;
-        Set_ui32 requiredSkills;
     }
-
-    struct Skill {
-        bytes32 name;
-    }
-
+    
+    // struct Skill {
+    //     bytes32 name;
+    // }
+    
     function TaskBoard() {
         totalTasks = 0;
+        address treasuryAddress = address(new Treasury());
+        Treasury treasury = Treasury(treasuryAddress);
+        
+        //tokenAddress = treasury.createToken();
     }
-
-    function newOwner(bytes32 _name) public returns(uint ownerId) {
+    
+    function newOwner(string _name) public returns(uint ownerId) {
         Owner newOwner = owners[msg.sender];
         newOwner.name = _name;
         newOwner.account = msg.sender;
-        setAddUnique(ownerList, msg.sender);
-
+        ownerArray.push(newOwner.account);
+        
         NewOwner(newOwner.name, newOwner.account);
-        return(ownerList.arr.length);
+        return(ownerArray.length);
     }
-
-    function newVolunteer(bytes32 _name) public returns(uint volunteerId) {
+    
+    function newVolunteer(string _name) public returns(uint volunteerId) {
         Volunteer newVolunteer = volunteers[msg.sender];
         newVolunteer.name = _name;
         newVolunteer.account = msg.sender;
-        setAddUnique(volunteerList, msg.sender);
+        volunteerArray.push(newVolunteer.account);
+        
+        return(volunteerArray.length);
     }
-
-    function newTask(bytes32 _name, bytes32 _description) public returns (uint32 taskId) {
+    
+    function newTask(string _name, string _description) public returns (uint32 taskId) {
         Task newTask = tasks[totalTasks];
         newTask.owner = owners[msg.sender];
         newTask.name = _name;
         newTask.description = _description;
         newTask.status = TaskStatus.New;
         newTask.value = msg.value;
-        setAddUnique(ownerList, msg.sender);
-
+        
+        
         totalTasks++;
-        setAddUnique(taskList, totalTasks);
-
+        taskArray.push(totalTasks);
+        
         NewTask(totalTasks, _name, _description);
         return(totalTasks);
-    }
+        
 
+    }
+    
+    // function setTokenAddress(address _tokenAddress) public onlyowner returns(bool success) {
+    //     tokenAddress = _tokenAddress;
+    //     return true;
+    // }
+    
+    function setTaskReward(uint _taskId, uint _rewardAmount, string _rewardName, string _description) returns (bool success) {
+        Task task = tasks[_taskId - 1];
+        if (task.owner.account == msg.sender) {
+            task.rewardAmount = _rewardAmount;
+            task.rewardName = _rewardName;
+            task.rewardDescription = _description;
+        }
+    }
+        
+    function getOwners() constant returns(address[] oList) {
+        return(ownerArray);
+    }
+    
     function getTasks() constant returns(uint32[] tList) {
-        return(taskList.arr);
+        return(taskArray);
     }
-
+    
+    function getTaskNames() constant {
+        var list = taskArray;
+        for (uint i = 0; i < list.length; i++) {
+            getTaskName(i);
+        }
+    }
+    
+    function getOwnerNames() constant {
+        var list = ownerArray;
+        for (uint i = 0; i < list.length; i++) {
+            getOwnerName(i);
+        }
+    }
+    
     function getTaskName(uint id) constant returns(string tName) {
-        bytes32 name = tasks[id - 1].name;
-        return(b2s(name));
+        string name = tasks[id - 1].name;
+        return(name);
     }
-
+    
+    function getOwnerName(uint id) constant returns(string oName) {
+        string name = owners[ownerArray[id]].name;
+        return(name);
+    }
+    
     function getTaskDescription(uint id) constant returns(string tDescription) {
-        bytes32 description = tasks[id - 1].description;
-        return(b2s(description));
+        string description = tasks[id - 1].description;
+        return(description);
     }
-
+    
     function getTaskStatus(uint id) constant returns(string status) {
         var taskStatus = tasks[id - 1].status;
         if (taskStatus == TaskStatus.New) {
@@ -114,66 +167,25 @@ contract TaskBoard is owned, named("TaskBoard"), util, SetUtil {
             return("Done");
         }
     }
-
+    
     function getTaskValue(uint id) constant returns(uint value) {
         return(tasks[id - 1].value);
     }
-
+    
+    function getTaskRewardAmount(uint id) constant returns(uint reward) {
+        return(tasks[id - 1].rewardAmount);
+    }
+    
     function getTaskOwnerName(uint id) constant returns(string owner) {
-        bytes32 name = tasks[id - 1].owner.name;
-        return(b2s(name));
+        string name = tasks[id - 1].owner.name;
+        return(name);
     }
-
+    
     function getTaskVolunteerName(uint id) constant returns(string volunteer) {
-        bytes32 name = tasks[id - 1].volunteer.name;
-        return(b2s(name));
+        string name = tasks[id - 1].volunteer.name;
+        return(name);
     }
-
-    function getTaskTotalSkills(uint id) constant returns(uint32 totalSkils) {
-        setCompact(tasks[id - 1].requiredSkills);
-        return(uint32(tasks[id - 1].requiredSkills.arr.length));
-    }
-
-    function getSkillName(uint id) constant returns(string skillName) {
-        bytes32 name = skills[id].name;
-        return(b2s(name));
-    }
-
-    function getTaskSkills(uint id) constant returns(uint32[] list) {
-        setCompact(tasks[id - 1].requiredSkills);
-        return(tasks[id - 1].requiredSkills.arr);
-    }
-
-    function addTaskSkill(uint32 taskID, bytes32 name) {
-        log1("addTaskSkill: ", name);
-        Task task = tasks[taskID - 1];
-        uint32 skillIndex = addSkill(name);
-        setAddUnique(task.requiredSkills, skillIndex);
-    }
-
-    function addSkill(bytes32 name) returns (uint32 index) {
-        var found = false;
-
-        for(uint32 i = 0; i < uint32(skillList.arr.length);i++) {
-            Skill storage s = skills[i];
-            if(s.name == name) {
-                index = i;
-                found = true;
-                break;
-            }
-        }
-
-        if(!found) {
-            log1("addSkill: ", name);
-            index = uint32(skillList.arr.length);
-            Skill newSkill = skills[index];
-            newSkill.name = name;
-            setAddUnique(skillList, index);
-            NewSkill(name);
-        }
-        return(index);
-    }
-
+    
     function acceptTask(uint id) public returns (bool success) {
         Task task = tasks[id - 1];
         if (task.status == TaskStatus.New) {
@@ -184,16 +196,18 @@ contract TaskBoard is owned, named("TaskBoard"), util, SetUtil {
             return(false);
         }
     }
-
+    
     function completeTask(uint id) public returns (string status) {
         Task task = tasks[id - 1];
         var taskStatus = "no change";
         if (msg.sender == task.volunteer.account) {
             task.status = TaskStatus.Completed;
             taskStatus = "Completion awaiting confirmation";
-        } else if (msg.sender == task.owner.account) {
+        } else if (msg.sender == task.owner.account && task.status != TaskStatus.Done) {
             task.status = TaskStatus.Done;
             taskStatus = "Complete";
+           // balanceOf[tokenAddress] -= task.reward;
+           // balanceOf[task.volunteer.account] += task.reward;
         }
         return (taskStatus);
     }
