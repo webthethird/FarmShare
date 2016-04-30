@@ -16,9 +16,6 @@ contract Market {
     message = stateMessage;
   }
 
-  /**
-   * Set the details specific to this product 
-   */
   function setUpProductDetails(uint price, string name) {
     stateMessage = "Product details set";
     message = stateMessage;
@@ -26,9 +23,6 @@ contract Market {
     productName = name;
   }
 
-  /**
-   * Fund the product contract to accept it
-   */
   function buyerPurchasesProduct() {
     if (msg.value >= productPrice) {
       buyer = msg.sender;
