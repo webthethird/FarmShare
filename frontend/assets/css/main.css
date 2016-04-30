@@ -1,0 +1,16 @@
+
+.price{
+    float:left;
+}
+.buyButton {
+    float:right;
+
+}
+
+
+.productList {
+    display: inline-block;
+}
+.productBox {
+    list-style-type: none;
+}

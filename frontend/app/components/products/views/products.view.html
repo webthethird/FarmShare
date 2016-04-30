@@ -1,0 +1,13 @@
+<div class="row clearfix">
+
+    <div class="col-md-8 column">   
+        <ul class="productList" ng-repeat="product in products">
+          <li class="productBox"> 
+        <h4>{{product.productName}}</h4>
+            <p>{{product.vendorName}}</p>
+            <p class="price">{{product.cost}}</p><button class="btn-success buyButton" ng-click"addToCart">Add</button>
+            </li> 
+        </ul>
+    </div>
+
+</div>
