@@ -8,22 +8,9 @@ contract communityCurrency {
     address _treasury; 
 	address _commune;
 	int _communityTax;
-	int _iniMemberCCUs; 
-	uint _iniMemberReputation;
-
-	uint _goalDemurrage;
-	uint _goalCrowdFunding;
-	uint _goalCommunityHours;
-	uint _goalExpenses;
-	int _realDemurrage;
-	uint _realCrowdFunding;
-	int _realCommunityHours;
-	uint _realExpenses;
+	int _iniMemberTokens; 
 	
 	int _totalMinted;
-	uint _totalCredit;
-	uint _totalTrustCost;
-	uint _totalTrustAvailable;
 
 	function communityCurrency () {
 		_treasury = msg.sender;  
@@ -36,10 +23,10 @@ contract communityCurrency {
 	}
 	
 	struct Member {
-		int _CCUs; 
+		int _balance; 
 		bool _isMember; 
 // 		uint _reputation; 
-		string _alias; 
+		string _name; 
 	}
 	
 	mapping (address => Member) balancesOf;	
@@ -52,57 +39,48 @@ contract communityCurrency {
 	event ClaimH(address indexed _hFrom, string _servantC, int _claimedH, uint _timeStampCH);
 	event PaidH(address indexed _hTo, string _servantP, uint _paidH, uint _timeStampPH);
 	
-	function acceptMember (address _newMember, string _newAlias) {
+	function acceptMember (address _newMember, string _newName) {
         if (msg.sender != _commune) return;
         balancesOf[_newMember]._isMember = true;
-		balancesOf[_newMember]._CCUs = _iniMemberCCUs;
- 		balancesOf[_newMember]._alias = _newAlias;
-		_totalMinted += _iniMemberCCUs;
-		NewMember(_newMember, _newAlias);
+		balancesOf[_newMember]._balance = _iniMemberTokens;
+ 		balancesOf[_newMember]._name = _newName;
+		_totalMinted += _iniMemberTokens;
+		NewMember(_newMember, _newName);
     }
 	
 	function kickOutMember (address _oldMember) {
         if (msg.sender != _commune) return;        
         balancesOf[_oldMember]._isMember = false;
-        string _oldAlias = balancesOf[_oldMember]._alias;
-        OldMember(_oldMember, _oldAlias);
+        string _oldName = balancesOf[_oldMember]._name;
+        OldMember(_oldMember, _oldName);
     }
     
     function transfer (address _payee, uint _payment) {
-		int _available = balancesOf[msg.sender]._CCUs;
+		int _available = balancesOf[msg.sender]._balance;
 		int _amountCCUs = int(_payment); 
 		if (_available > _amountCCUs) {
-			balancesOf[msg.sender]._CCUs -= _amountCCUs;
-			balancesOf[_payee]._CCUs += _amountCCUs;
+			balancesOf[msg.sender]._balance -= _amountCCUs;
+			balancesOf[_payee]._balance += _amountCCUs;
 			// @notice apply community tax and send it to the Community account
-			balancesOf[_payee]._CCUs -= _amountCCUs * _communityTax/100;
-			balancesOf[_commune]._CCUs += _amountCCUs * _communityTax/100;
+			balancesOf[_payee]._balance -= _amountCCUs * _communityTax/100;
+			balancesOf[_commune]._balance += _amountCCUs * _communityTax/100;
 			Transfer(_payment, msg.sender, _payee, now);
 		}
 	}
 	
-	function getParameters() constant returns (address _getTreasury, address _getCommunity, int _getIniMemberCCUs, uint _getIniMemberReputation, uint _getExchange, string getName, string getSymbol, string getCommunityName, uint getBaseUnits) {
+	function getParameters() constant returns (address _getTreasury, address _getCommunity, int _getIniMemberTokens, uint _getIniMemberReputation, uint _getExchange, string getName, string getSymbol, string getCommunityName, uint getBaseUnits) {
 		_getTreasury = _treasury;
 		_getCommunity = _commune;
-		_getIniMemberCCUs = _iniMemberCCUs;
-		_getIniMemberReputation = _iniMemberReputation;
+		_getIniMemberTokens = _iniMemberTokens;
 		getName = name;
 		getSymbol = symbol;
 		getCommunityName = communityName;
 		getBaseUnits = baseUnits;
 	}
-	
-	function getMoneyTotals() constant returns (int _getTotalMinted, uint _getTotalCredit, uint _getTotalTrustCost, uint _getTotalTrustAvailable) {
-		_getTotalMinted = _totalMinted;
-		_getTotalCredit = _totalCredit;
-		_getTotalTrustCost = _totalTrustCost;
-		_getTotalTrustAvailable = _totalTrustAvailable;
-	}
 
-	function newParameters (int _newDemurrage, uint _newRewardRate, int _newIniCCUs, uint _newIniR) {
+	function newParameters (int _newDemurrage, uint _newRewardRate, int _newIniTokens, uint _newIniR) {
 		if (msg.sender != _treasury) return;
-		_iniMemberCCUs = _newIniCCUs;
-		_iniMemberReputation = _newIniR;
+		_iniMemberTokens = _newIniTokens;
 	}
 	
 	function newCommune (address _newCommune) {
@@ -114,28 +92,4 @@ contract communityCurrency {
 		if (msg.sender != _commune) return;
 		_treasury = _newTreasury;
 	}
-	
-	function getBudget() constant returns (uint _getGoalDemurrage, uint _getGoalCrowdFunding, uint _getGoalCommunityHours, uint _getGoalExpenses, int _getRealDemurrage, uint _getRealCrowdFunding, int _getRealCommunityHours, uint _getRealExpenses, int _getCommuneBalance, int _getTreasuryBalance) {
-			_getGoalDemurrage = _goalDemurrage;
-			_getGoalCrowdFunding = _goalCrowdFunding;
-			_getGoalCommunityHours = _goalCommunityHours;
-			_getGoalExpenses = _goalExpenses;
-			_getRealDemurrage = _realDemurrage;
-			_getRealCrowdFunding = _realCrowdFunding;
-			_getRealCommunityHours = _realCommunityHours;
-			_getRealExpenses = _realExpenses;
-			_getCommuneBalance = balancesOf[_commune]._CCUs;
-			_getTreasuryBalance = balancesOf[_treasury]._CCUs;
-		}
-
-	function setNewBudget (uint _newGoalDemurrage, uint _newGoalCrowdFunding, uint _newGoalCommunityHours, uint _newGoalExpenses) {
-			_goalDemurrage = _newGoalDemurrage;
-			_goalCrowdFunding = _newGoalCrowdFunding;
-			_goalCommunityHours = _newGoalCommunityHours;
-			_goalExpenses = _newGoalExpenses;
-			_realDemurrage = 0;
-			_realCrowdFunding = 0;
-			_realCommunityHours = 0;
-			_realExpenses = 0;		
-		}
 }
