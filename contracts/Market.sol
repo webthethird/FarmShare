@@ -2,14 +2,17 @@ import "Treasury.sol";
 
 //adapted from JobMarket contract by ultra-koder: https://github.com/ultra-koder/JobMarket/blob/master/dapp/contracts/jobmarket.sol
 contract Market {
+    uint32 public totalProducts;
   address public tokenAddress;
 
   event NewProduct(uint id, string name, string description);
   event NewSeller(string name, address addr);
   
+  uint32[] productArray;
   address[] sellerArray;
   address[] buyerArray;
-    
+  
+  mapping (uint => Product) products;
   mapping (address => Seller) sellers;
   mapping (address => Buyer) buyers;
 
@@ -63,25 +66,26 @@ contract Market {
 
   function newProduct(string _name, string _description) public returns (uint32 taskId) {
         Product newProduct = products[totalProducts];
-        newProduct.owner = sellers[msg.sender];
+        newProduct.seller = sellers[msg.sender];
         newProduct.name = _name;
         newProduct.description = _description;
-        newProduct.status = ProductStatus.New;
-        newProduct.value = msg.value;
+        // newProduct.status = ProductStatus.New;
+        newProduct.price = msg.value;
         
         totalProducts++;
-        productArray.push(totalProducts);
+        // productArray.push(totalProducts);
         
         NewProduct(totalProducts, _name, _description);
         return(totalProducts);
+  }
 //function setTokenAddress(address _tokenAddress) public onlyowner returns(bool success) {
     //tokenAddress = _tokenAddress;
     //return true;
     // }
     
     function setProductPrice(uint _productId, uint _price, string _description) returns (bool success) {
-        Task task = tasks[_taskId - 1];
-        if (task.owner.account == msg.sender) {
+        Product product = products[_productId - 1];
+        if (product.seller.account == msg.sender) {
             product.price = _price;
         }
     }
@@ -109,7 +113,7 @@ contract Market {
     }
     
     function getProductName(uint id) constant returns(string pName) {
-        string name = tasks[id - 1].name;
+        string name = products[id - 1].name;
         return(name);
     }
     
