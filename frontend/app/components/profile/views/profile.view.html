@@ -1,0 +1,21 @@
+<div class="row clearfix">
+
+    <div class="col-md-4">   
+    <img class="img-fluid profileFace   " ng-src="assets/img/williamFace.png">
+    </div>
+    
+
+    <div class="col-md-8">
+        <h2>{{user.userName}}</h2>
+        <p>{{user.bcAddress}}</p>
+        <br/>
+
+            <h4>Wallet Balance: {{user.wallet.balance}}</h4>
+            <p>Current Pending Tasks:</p>
+            <ul ng-repeat="task in tasks">
+            <li>{{task}}</li>
+            </ul>
+    
+    </div>
+
+</div>

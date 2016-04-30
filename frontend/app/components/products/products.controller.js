@@ -24,6 +24,10 @@
                        
         $scope.products = products;
         
+        $scope.addToCart = function(itemId){
+            
+        }
+        
         return $scope;
        }
 })();
