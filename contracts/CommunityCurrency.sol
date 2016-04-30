@@ -34,10 +34,6 @@ contract communityCurrency {
 	event Transfer(uint _amount, address indexed _from, address indexed _to, uint _timeStampT);
 	event NewMember(address indexed _member, string _alias);
 	event OldMember(address indexed _exMember, string _exAlias);
-	event Credit(address indexed _MoneyLender, address indexed _borrowerAddress, uint _cDealine, uint _endorsedUoT);
-    event CreditExp(address indexed _MoneyLender, address indexed _exBorrowerAddress, uint _oldUoT , bool _success, uint _timeStampCX);
-	event ClaimH(address indexed _hFrom, string _servantC, int _claimedH, uint _timeStampCH);
-	event PaidH(address indexed _hTo, string _servantP, uint _paidH, uint _timeStampPH);
 	
 	function acceptMember (address _newMember, string _newName) {
         if (msg.sender != _commune) return;
@@ -57,13 +53,13 @@ contract communityCurrency {
     
     function transfer (address _payee, uint _payment) {
 		int _available = balancesOf[msg.sender]._balance;
-		int _amountCCUs = int(_payment); 
-		if (_available > _amountCCUs) {
-			balancesOf[msg.sender]._balance -= _amountCCUs;
-			balancesOf[_payee]._balance += _amountCCUs;
+		int _amountTokens = int(_payment); 
+		if (_available > _amountTokens) {
+			balancesOf[msg.sender]._balance -= _amountTokens;
+			balancesOf[_payee]._balance += _amountTokens;
 			// @notice apply community tax and send it to the Community account
-			balancesOf[_payee]._balance -= _amountCCUs * _communityTax/100;
-			balancesOf[_commune]._balance += _amountCCUs * _communityTax/100;
+			balancesOf[_payee]._balance -= _amountTokens * _communityTax/100;
+			balancesOf[_commune]._balance += _amountTokens * _communityTax/100;
 			Transfer(_payment, msg.sender, _payee, now);
 		}
 	}
