@@ -11,6 +11,12 @@
     
 }
 
+.taskIcon{
+    height:5em;
+    width:4.5em;
+    float:left;
+    padding-top:2.5em;
+}
 
 .productList {
     display: inline-block;

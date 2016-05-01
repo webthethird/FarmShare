@@ -10,16 +10,16 @@
 
         var products = [{productName:"Peppers",
                         vendorName:"Main Street Farm Market",
-                        cost: "1 ETH"},
+                        cost: "1 fs"},
                        {productName:"Apples",
                         vendorName:"Main Street Farm Market",
-                        cost: "1 ETH"},
+                        cost: "1 fs"},
                         {productName:"Green Peppers",
                         vendorName:"Main Street Farm Market",
-                        cost: "1 ETH"},
+                        cost: "1 fs"},
                         {productName:"Limes",
                         vendorName:"Main Street Farm Market",
-                        cost: "1 ETH"}
+                        cost: "1 fs"}
                        ]
                        
         $scope.products = products;
