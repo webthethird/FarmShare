@@ -1,13 +1,13 @@
 contract FarmShare {
 	
 	//token parameters
-  uint baseUnits;
-  string tokenName;
-  string symbol;
-  string communityName;
+    uint baseUnits;
+    string tokenName;
+    string symbol;
+    string communityName;
 
-  //community parameters
-  address _treasury; 
+    //community parameters
+    address _treasury; 
 	address _community;
 	uint _communityTax;
 	uint _iniMemberTokens = 10; 
@@ -16,22 +16,22 @@ contract FarmShare {
 	
 	//tasks stuff
 	uint32 public totalTasks;
-  uint32[] taskArray;
-  address[] ownerArray;
-  address[] volunteerArray;
+    uint32[] taskArray;
+    address[] ownerArray;
+    address[] volunteerArray;
     
-  //market stuff
-  uint32 public totalProducts;
-  uint32[] productArray;
-  address[] sellerArray;
-  address[] buyerArray;
+    //market stuff
+    uint32 public totalProducts;
+    uint32[] productArray;
+    address[] sellerArray;
+    address[] buyerArray;
 
-  enum TaskStatus {
-    New,
-    InProgress,
-    Completed,
-    Done
-  }
+    enum TaskStatus {
+        New,
+        InProgress,
+        Completed,
+        Done
+    }
 
 	function FarmShare () {
 		_treasury = msg.sender;  
@@ -185,13 +185,13 @@ contract FarmShare {
         return(volunteerArray.length);
     }
     
-    function newTask(string _name, string _description) public returns (uint32 taskId) {
+    function newTask(string _name, string _description, uint _reward) public returns (uint32 taskId) {
         Task newTask = tasks[totalTasks];
         newTask.owner = owners[msg.sender];
         newTask.name = _name;
         newTask.description = _description;
         newTask.status = TaskStatus.New;
-        
+        newTask.reward = _reward;
         
         totalTasks++;
         taskArray.push(totalTasks);
