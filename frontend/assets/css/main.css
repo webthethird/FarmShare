@@ -18,6 +18,10 @@
     padding-top:2.5em;
 }
 
+.taskListTask{
+    font-size: 1em;
+}
+
 .productList {
     display: inline-block;
 }

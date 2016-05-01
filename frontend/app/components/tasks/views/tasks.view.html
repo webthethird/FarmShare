@@ -1,11 +1,12 @@
 <div class="row clearfix">
 
 <div ng-repeat="task in tasks">
+    <div ng-show="task.active==true">
     <div class="col-md-1"><img class="taskIcon" ng-src="{{task.iconURL}}"></div>
     <div class="col-md-11 taskBox">
     <h3>{{task.title}}</h3>
-        <p>Bounty: {{task.bounty}} fs<span ng-show="task.hourly"> /hr</span></p><button class="btn-success commitButton" ng-click="commitWork">Commit</button>
+        <p>Bounty: {{task.bounty}} fs</p><button class="btn-success commitButton" ng-click="commitWork(task)">Commit</button>
     </div>
     </div>
-  
+  </div>
 </div>

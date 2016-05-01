@@ -37,6 +37,13 @@ angular.module('angularstrapApp')
                 controller: 'profileController',
                 controllerAs: 'ctrl'
             })
+        .state('farmer', {
+                // we'll add another state soon
+                url: '/farmer',
+                templateUrl: 'app/components/farmer/views/farmer.view.html',
+                controller: 'farmerController',
+                controllerAs: 'ctrl'
+            })
             .state('tasks', {
                 // we'll add another state soon
                 url: '/tasks',

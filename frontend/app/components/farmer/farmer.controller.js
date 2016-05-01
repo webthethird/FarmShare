@@ -2,13 +2,13 @@
     'use strict';
 
     angular.module('angularstrapApp')
-        .controller('profileController', profileController);
+        .controller('farmerController', farmerController);
 
-    profileController.$inject = ["$scope", "$http", "$window", "$q", "asyncService"];
+    farmerController.$inject = ["$scope", "$http", "$window", "$q", "asyncService"];
 
-    function profileController($scope, $http, $window, $q) {
+    function farmerController($scope, $http, $window, $q) {
 
-        $scope.user = {userName:"William Bodell",
+        $scope.user = {userName:"Farmer Bill",
                        bcAddress:"9fadf8832631a0705f107c00349926ee",
                        wallet:{balance:42,address:"b046a46a8946bd09a43755320375a3fc"}
                        }
