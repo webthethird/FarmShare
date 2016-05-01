@@ -13,13 +13,16 @@
         <h4>Wallet Balance: {{user.wallet.balance}}</h4><br/>
         <p>Current Pending Tasks:</p>
         <ul ng-repeat="task in tasks">
-            <li ng-show="task.status!=0" class="taskListTask">{{task._id}}
+            <li ng-show="task.status!=0 && task.status!=2" class="taskListTask">{{task._id}} - {{task.name}} - {{task.bounty}} fs
                 <ul>
                     <li>
                         <span ng-show="task.status==1">
-                            <button class="btn-success">Mark work complete</button>
+                            <button class="btn-success" ng-click="markComplete(task)">Mark work complete</button>
                             <button class="btn-danger">Abandon Task</button>
                             </span>
+                        <span ng-show="task.status==4">
+                        <button class="btn-success-outline">Pending Approval</button>
+                        </span>
                             <button ng-show="task.status==2" class="btn-warning">Approve work complete </button>
                     </li>
                 </ul>

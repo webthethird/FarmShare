@@ -8,26 +8,19 @@
 
         function asyncService($http, $q) {
             
-            var factory = {
-                //properties
-                retrievedData: [],
-                getHeroText : getHeroText
-            };
+           var tasks= [{_id:"56c605b94f2db541c06b7b9672951a67",
+                         status:1,
+                        name:"Deliver shares to Jeffersonville",
+                        bounty:5
+                        },{_id:"cf13117b32a12e8220aa66943e8b9d7c",
+                           status:2
+                          },{_id:"cf13dkda12e8220aa66943e8b9d7c",
+                           status:0
+                          }]
+           
+           var balances = [50,42]
+var structure =[tasks,balances]
 
-            function getHeroText() {
-
-                // this is where we'd put some ajax calls
-
-                factory.retrievedData = {
-                    HeroHeader: "Hello AngularStrap!",
-                    HeroText: "This is the AngularStrap home page. This text is being pulled from a service, and can be populated by hand coding the property in the controller, dynamically or via services."
-                };
-
-                //factory.retrievedData.HeroHeader = "Hello World!";
-                //factory.retrievedData.HeroText = "This is the AngularStrap home page. This text is being pulled from a service, and can be populated by hand coding the property in the controller, dynamically or via services.";
-
-
-            }
-            return factory;
+            return structure;
         }
 })();

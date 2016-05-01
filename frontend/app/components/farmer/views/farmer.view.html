@@ -10,21 +10,28 @@
         <p>{{user.bcAddress}}</p>
         <br/>
 
-        <h4>Wallet Balance: {{user.wallet.balance}}</h4>
+        <h4>Wallet Balance: {{user.wallet.balance}}</h4><br/>
         <p>Current Pending Tasks:</p>
         <ul ng-repeat="task in tasks">
-            <li class="taskListTask">{{task._id}}
+            <li ng-show="task.status==4" class="taskListTask">{{task._id}} - {{task.name}} - {{task.bounty}} fs
                 <ul>
                     <li>
+<!--
                         <span ng-show="task.status==1">
                             <button class="btn-success">Mark work complete</button>
                             <button class="btn-danger">Abandon Task</button>
                             </span>
-                            <button ng-show="task.status==2" class="btn-warning">Approve work complete </button>
+-->
+                            <button ng-show="task.status==4" class="btn-warning" ng-click="approve(task)">Approve work complete </button>
                     </li>
                 </ul>
 
             </li>
+        </ul>
+        <p>Completed tasks</p>
+        <ul ng-repeat="task in tasks">
+            
+        <li ng-show="task.status==0" class="taskListTask">{{task._id}}</li>
         </ul>
 
     </div>
