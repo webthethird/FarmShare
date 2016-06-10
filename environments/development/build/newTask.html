@@ -1,0 +1,76 @@
+
+
+<html lang="en">
+<head>
+  <title>New Task</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="web3.js"></script>
+  <script type="text/javascript" src="bignumber.js"></script>
+  <script type="text/javascript" src="app.js"></script>
+  <script type="text/javascript" >
+
+	window.onload = function () {
+	document.getElementById('me').innerHTML = "alias: " + myName + "<br/> account: " + coinbase;
+  document.getElementById('numTasks').innerHTML = "<b>Total Tasks: </b>" + numTasks;
+	}
+
+  function newTask() {
+    var tName = document.getElementById('taskName').value;
+    var tDescription = document.getElementById('description').value;
+    var tReward = document.getElementById('reward').value;
+    taskboard.newTask(tName, tDescription, tReward);
+    location.reload();
+  }
+
+   </script>
+    <style>
+    .navbar {
+      margin-bottom: 0;
+      border-radius: 0;
+     }
+   </style>
+</head>
+<body>
+
+
+<div class="row">
+<script type="text/javascript" src="navbarDropdown.js"></script>
+</div>
+
+
+<div class="container bg-3 text-center">
+    <small><p id="me"></p></small>
+  <div class="row">
+     <div class="col-sm-12">
+    <h3><span class="glyphicon glyphicon-share"></span> New Task</h3>
+    <p id="numTasks"></p>
+    <form class="form-horizontal" role="form">
+  	 	<div class="form-group">
+		    <label class="control-label col-sm-4" for="taskName">Name:</label>
+		    <div class="col-sm-6"><input class="form-control" id="taskName" placeholder="Enter task name"></input></div>
+		 </div>
+		 <div class="form-group">
+		    <label class="control-label col-sm-4" for="description">Description:</label>
+		    <div class="col-sm-6"><input class="form-control" id="description" placeholder="Enter task description"></input></div>
+		 </div>
+     <div class="form-group">
+       <label class="control-label col-sm-4" for="reward">Reward:</label>
+       <div class="col-sm-6"><input class="form-control" id="reward" placeholder="Enter reward amount"></input></div>
+     </div>
+	</form>
+  <button type="submit" class="btn btn-default" onClick="newTask()"> Post Task</button>
+   	</div>
+   </div>
+</div>
+<div class="panel-footer">
+<small>
+<p><img src="https://trancsitu.files.wordpress.com/2014/05/ethereum-logo.png" width="20" align="top"/> <i>Powered by ethereum</i></p>
+<p id="ethBalance"></p>
+</small>
+</div>
+</body>
+</html>

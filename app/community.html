@@ -1,0 +1,150 @@
+
+
+<html lang="en">
+<head>
+  <title>Community Functions</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="web3.js"></script>
+  <script type="text/javascript" src="bignumber.js"></script>
+  <script type="text/javascript" src="app.js"></script>
+  <script type="text/javascript">
+	window.onload = function () {
+
+	document.getElementById('me').innerHTML = "alias: " + myName + "<br/> account: " + coinbase;
+	document.getElementById('oldGD').innerText = "Goal Demurrage income: " + goalDemurrage/baseUnits +" HR";
+	document.getElementById('oldGCF').innerText = "Goal Crowd-funding income: " + goalCrowdFundig/baseUnits +" HR";
+	document.getElementById('oldGS').innerText = "Goal Service Hours spending: " + goalCommunityHours/baseUnits +" HR";
+	document.getElementById('oldGE').innerText = "Goal Expenses spending: " + goalExpenses/baseUnits +" HR";
+	document.getElementById('oldTreasury').innerText = treasuryAddr;
+	}
+
+	function acceptMember () {
+		var newAddress = document.getElementById('accountNew').value;
+		var newAlias = document.getElementById('aliasNew').value;
+		farmshare.acceptMember (newAddress, newAlias);
+		location.reload();
+	}
+
+	function kickOutMember () {
+	var oldAddress = document.getElementById('oldAddress').value;
+  farmshare.kickOutMember (oldAddress);
+		location.reload();
+	}
+
+	function newTreasury () {
+		var newTreasury = document.getElementById('newTreasury').value;
+		farmshare.newTreasury(newTreasury);
+		location.reload();
+	}
+
+	</script>
+    <style>
+    .navbar {
+      margin-bottom: 0;
+      border-radius: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="row">
+  <script type="text/javascript" src="navbarDropdown.js"></script>
+  </div>
+
+<div class="container bg-3 text-center">
+      <small><p id="me"></p></small>
+<h3><span class="glyphicon glyphicon-home"></span> Community Functions</h3>
+		<div class="alert alert-warning">
+			<small>This page only available to the Community Account</small>
+		</div>
+   <div class="row">
+   <div class="col-sm-4">
+
+	<!-- <h4><span class="glyphicon glyphicon-th-list"></span> New Budget Goals</h4>
+		<div class="well">
+	  		<p id="oldGD"></p>
+	  		<p id="oldGCF"></p>
+	  		<p id="oldGS"></p>
+	  	  	<p id="oldGE"></p>
+	  	</div>
+		<form role="form">
+		  <div class="form-group">
+		    <label for="newgoalDemurrage">Goal Demurrage income:</label>
+		    <input type="text" class="form-control" id="newgoalDemurrage" placeholder="Add new goal">
+		  </div>
+ 		  <div class="form-group">
+		    <label for="newgoalCrowdFunding">Goal Crowd-funding income:</label>
+		    <input type="text" class="form-control" id="newgoalCrowdFunding" placeholder="Add new goal">
+		  </div>
+		  <div class="form-group">
+		    <label for="newgoalServices">Goal Service Hours spending:</label>
+		    <input type="text" class="form-control" id="newgoalServices" placeholder="Add new goal">
+		  </div>
+		  <div class="form-group">
+		    <label for="newgoalExpenses">Goal Expenses spending:</label>
+		    <input type="text" class="form-control" id="newgoalExpenses" placeholder="Add new goal">
+		  </div>
+		</form>
+			<button type="submit" class="btn btn-default" onClick="setNewBudget();"><span class="glyphicon glyphicon-th-list"></span> Change Budget Goals</button> -->
+
+		<h4><span class="glyphicon glyphicon-lock"></span> Change Treasury address</h4>
+       	<form role="form">
+		  <div class="form-group">
+		    <p id="oldTreasury"></p>
+		    <input type="text" class="form-control" id="newTreasury" placeholder="Enter the new Treasury address">
+		  </div>
+		</form>
+		    <button type="submit" class="btn btn-default" onClick="newTreasury();"><span class="glyphicon glyphicon-lock"></span> Change Treasury address</button>
+
+	   	</div>
+
+   <div class="col-sm-4">
+
+     <h4><span class="glyphicon glyphicon-ok"></span> Accept New Member</h4>
+    <form role="form">
+		  <div class="form-group">
+		    <label for="accountNew">Account:</label>
+		    <input type="text" class="form-control" id="accountNew" placeholder="Enter new member account">
+		  </div>
+		  <div class="form-group">
+		    <label for="aliasNew">Alias:</label>
+		    <input type="text" class="form-control" id="aliasNew" placeholder="Enter new member alias">
+		  </div>
+	</form>
+		    <button type="submit" class="btn btn-default" onClick="acceptMember()"><span class="glyphicon glyphicon-ok"></span> Accept</button>
+</div>
+
+<div class="col-sm-4">
+	<h4><span class="glyphicon glyphicon-remove"></span> Remove Member</h4>
+    <form role="form">
+		  <div class="form-group">
+		    <label for="oldAddress">Account:</label>
+		    <input type="text" class="form-control" id="oldAddress" placeholder="Enter account member to be removed">
+		  </div>
+	</form>
+		    <button type="submit" class="btn btn-default" onClick="kickOutMember();"><span class="glyphicon glyphicon-remove"></span> Remove</button>
+</div>
+	<!-- <h4><span class="glyphicon glyphicon-heart"></span> Attribute Reputation</h4>
+    <form role="form">
+		  <div class="form-group">
+		    <label for="accountTrust">Account:</label>
+		    <input type="text" class="form-control" id="accountTrust" placeholder="Enter account to be trusted">
+		  </div>
+		  <div class="form-group">
+		    <label for="reputation">Reputation in UoT:</label>
+		    <input type="text" class="form-control" id="reputation" placeholder="Enter reputation to be endorsed in UoT">
+		  </div>
+	</form>
+		    <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-heart"></span> Attribute reputation</button> -->
+
+	</div>
+
+  </div>
+</div>
+
+</body>
+</html>

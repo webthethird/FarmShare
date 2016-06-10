@@ -1,0 +1,90 @@
+
+
+<html lang="en">
+<head>
+  <title>New Task</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="web3.js"></script>
+  <script type="text/javascript" src="bignumber.js"></script>
+  <script type="text/javascript" src="app.js"></script>
+  <script type="text/javascript" src="pnglib.js"></script>
+  <script type="text/javascript" src="identicon.js"></script>
+  <script type="text/javascript" >
+
+  function getTasks() {
+    for(i = 0; i < numTasks; i++){
+      var taskInfo = taskboard.getTaskInfo(i);
+      var taskName = taskInfo[0];
+      var taskDescription = taskInfo[1];
+      var taskReward = taskInfo[2];
+      var taskOwnerAddr = taskInfo[3];
+      var taskOwner = farmshare.getMemberInfo(taskOwnerAddr);
+      var taskOwnerName = taskOwner[0];
+      var options = {size: 30};
+      var data = new Identicon(taskOwnerAddr, options).toString();
+      document.getElementById('tasks').innerHTML += "<div class='panel panel-default'><div class='panel-heading text-left'>Task: " + taskName + "</div><div class='panel-body'><div class='col-md-4 text-left'>Description: " + taskDescription + "</div><div class='col-md-4 text-left'>Owner: <img data-toggle='tooltip' title=" + taskOwnerAddr + " src='data:image/png;base64," + data + "'>" + taskOwnerName + "</div><div class='col-md-2 text-right'>Reward: " + taskReward + "</div><div class='button-group pull-right'><a href='#' class='btn btn-primary'>Accept</a></div></div></div>";
+      // "<li><div class='col-sm-2 text-left'>" + taskName + "</div><div class='col-sm-4 text-left'>" + taskDescription + "</div><div class='col-sm-2 text-left'>" + taskReward + "</div><div class='col-sm-2 text-left'><img src='data:image/png;base64," + data + "'> " + taskOwnerName + "</div>";
+      // document.getElementById('tasks').innerHTML += "<div class='col-sm-2'><div class='button-group pull-right'><a href='#' class='btn btn-primary'>Accept</a></div></div></li><br>";
+      // taskNames += taskInfo[0] + "<br>";
+      // taskDescriptions += taskInfo[1] + "<br>";
+      // taskRewards += taskInfo[2] + " shares" + "<br>";
+      // var addr = taskInfo[3];
+      // var options = {size: 20};
+      // var data = new Identicon(addr, options).toString();
+      // var owner = farmshare.getMemberInfo(addr);
+      // var ownerName = owner[0];
+      // taskOwners += '<img src="data:image/png;base64,' + data + '"> ' + ownerName + "<br>";
+    }
+  }
+
+	window.onload = function () {
+    $(document).ready(function(){
+      $('[data-toggle="tooltip"]');
+    });
+	document.getElementById('me').innerHTML = "alias: " + myName + "<br/> account: " + coinbase;
+	document.getElementById('numTasks').innerHTML = "<b>Total Tasks: </b>" + numTasks;
+  getTasks();
+	}
+
+   </script>
+    <style>
+    .navbar {
+      margin-bottom: 0;
+      border-radius: 0;
+     }
+   </style>
+</head>
+<body>
+
+
+<div class="row">
+<script type="text/javascript" src="navbarDropdown.js"></script>
+</div>
+
+
+<div class="container bg-3 text-center">
+    <small><p id="me"></p></small>
+	<h3><span class="glyphicon glyphicon-list-alt"></span> View Tasks</h3>
+  <p id="numTasks"></p>
+  <div class="panel-group" id="tasks">
+  </div>
+
+  <!-- <div class="row">
+    <div class="col-sm-2" id="listNames"></div>
+    <div class="col-sm-4" id="listDescriptions"></div>
+    <div class="col-sm-2" id="listRewards"></div>
+    <div class="col-sm-4" id="listOwners"></div>
+   </div> -->
+</div>
+<div class="panel-footer">
+<small>
+<p><img src="https://trancsitu.files.wordpress.com/2014/05/ethereum-logo.png" width="20" align="top"/> <i>Powered by ethereum</i></p>
+<p id="ethBalance"></p>
+</small>
+</div>
+</body>
+</html>
